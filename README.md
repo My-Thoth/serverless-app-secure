@@ -1,102 +1,143 @@
-It seems like I can’t do more advanced data analysis right now. Please try again later. If you'd like, I can guide you on how to create the README file manually for your project.
+# Task Management System
 
-Here's a draft of the README that you can use:
+This project is a simple task management application that allows users to add, view, and delete tasks. It includes a backend built with AWS Lambda, API Gateway, and DynamoDB, and a frontend built with React.
 
 ---
-
-# Country-City Dropdown API
-
-This project is a simple RESTful API built using Flask that allows users to fetch country and city data. The API can be used to populate a country dropdown and based on the selected country, a corresponding city dropdown can be populated dynamically. It is a useful tool for implementing location-based dropdowns in various applications.
 
 ## Features
-- **GET `/api/countries/`**: Fetches a list of countries available in the database.
-- **GET `/api/cities/`**: Fetches a list of all cities in the database.
-- **GET `/api/countries/{country_code}/cities/`**: Fetches a list of cities for a given country code.
-
-Additionally, there is an endpoint that can be embedded in a frontend dropdown to allow users to select a country and then dynamically load the cities based on the selected country.
-
-### Example of Country Dropdown
-- **URL**: `/select-country`
-- This endpoint renders a page with a country dropdown where users can select a country. Once a country is selected, the corresponding cities will be populated in a city dropdown.
-
-## Installation
-
-1. Clone this repository to your local machine:
-   ```bash
-   git clone https://github.com/yourusername/country-city-dropdown-api.git
-   ```
-
-2. Navigate to the project directory:
-   ```bash
-   cd country-city-dropdown-api
-   ```
-
-3. Set up your virtual environment:
-   - **For macOS/Linux**:
-     ```bash
-     python3 -m venv venv
-     source venv/bin/activate
-     ```
-   - **For Windows**:
-     ```bash
-     python -m venv venv
-     venv\Scripts\activate
-     ```
-
-4. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. Create the `.env` file in the root of the project with the following environment variables:
-   ```bash
-   FLASK_APP=app
-   FLASK_ENV=development
-   DATABASE_URL=postgresql://username:password@localhost/dbname
-   ```
-   Make sure to replace `username`, `password`, and `dbname` with your PostgreSQL credentials.
-
-6. Run the database migrations to set up your PostgreSQL database:
-   ```bash
-   flask db upgrade
-   ```
-
-7. Run the Flask application:
-   ```bash
-   flask run
-   ```
-
-The application will be running locally at `http://127.0.0.1:5000/`. You can test the API endpoints and see the dropdown functionality.
-
-## Docker Setup (Optional)
-
-If you prefer to deploy this application using Docker, you can follow these steps:
-
-1. Build the Docker image:
-   ```bash
-   docker build -t country-city-dropdown-api .
-   ```
-
-2. Run the Docker container:
-   ```bash
-   docker run -p 5000:5000 country-city-dropdown-api
-   ```
-
-The application will now be available at `http://localhost:5000`.
-
-## API Endpoints
-
-- **`/api/countries/`** - Returns a list of countries.
-- **`/api/cities/`** - Returns a list of cities.
-- **`/api/countries/{country_code}/cities/`** - Returns cities for the given country code.
-- **`/select-country`** - A page with a country dropdown for frontend use.
-
-## Contributions
-
-Contributions are welcome! Feel free to submit a pull request if you'd like to improve the project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- Add new tasks with unique IDs.
+- View a list of tasks.
+- Delete tasks by their unique IDs.
+- Scalable and serverless architecture using AWS services.
 
 ---
+
+## Table of Contents
+1. [Architecture](#architecture)
+2. [Technologies Used](#technologies-used)
+3. [Setup Instructions](#setup-instructions)
+   - [Backend Setup](#backend-setup)
+   - [Frontend Setup](#frontend-setup)
+4. [Deploying to AWS](#deploying-to-aws)
+5. [Usage](#usage)
+6. [Contributing](#contributing)
+7. [License](#license)
+
+---
+
+## Architecture
+The system consists of:
+1. Frontend: A React application for interacting with the task management system.
+2. Backend: AWS Lambda functions connected to an API Gateway for managing task operations.
+3. Database: DynamoDB table to store tasks.
+4. Hosting: 
+   - Frontend can be hosted on AWS Amplify or S3.
+   - Backend APIs are deployed using AWS Lambda.
+
+---
+
+## Technologies Used
+- Backend:
+  - AWS Lambda
+  - DynamoDB
+  - API Gateway
+  - Python (for Lambda functions)
+- Frontend:
+  - ReactJS
+  - HTML/CSS/JavaScript
+- Infrastructure:
+  - CloudFormation
+  - GitHub
+
+---
+
+## Setup Instructions
+
+### Backend Setup
+1. Clone the Repository:
+  
+   git clone https://github.com/your-repo-name/task-management.git
+   cd task-management/backend
+   
+2. Install Dependencies:
+   Inside the lambdas/ folder:
+  
+   pip install -r requirements.txt -t .
+   
+3. Upload Lambda Functions to S3:
+   - Zip the files for each Lambda function (e.g., `add_task.py`).
+   - Upload the .zip files to an S3 bucket.
+
+4. Update CloudFormation Template:
+   - Update the cloudformation_template.yaml file to include your S3 bucket name and key for Lambda function code.
+
+5. Deploy CloudFormation Stack:
+   Use the AWS CLI to deploy:
+  
+   aws cloudformation deploy      --template-file templates/cloudformation_template.yaml      --stack-name TaskManagementStack      --capabilities CAPABILITY_NAMED_IAM
+   
+6. Verify Deployment:
+   - Check the API Gateway endpoint in the AWS Console.
+   - Ensure the DynamoDB table and Lambda functions are created successfully.
+
+---
+
+### Frontend Setup
+
+1. Navigate to the Frontend Directory:
+  
+   cd task-management/frontend
+   
+2. Install Dependencies:
+  
+   npm install
+   
+3. Configure API Endpoint:
+   - Open src/components/TaskList.js.
+   - Replace the placeholder API_BASE_URL with your API Gateway endpoint.
+
+4. Start the Frontend Locally:
+  
+   npm start
+   
+5. Build for Production:
+   To prepare the frontend for deployment:
+  
+   npm run build
+   
+6. Deploy Frontend:
+   - Upload the build/ folder to an S3 bucket or deploy using AWS Amplify.
+
+---
+
+## Deploying to AWS
+1. Backend:
+   - Deploy via CloudFormation using the steps above.
+2. Frontend:
+   - Use AWS Amplify or host the built files in an S3 bucket with a public URL.
+
+---
+
+## Usage
+
+1. Access the Frontend:
+   - Open the frontend URL (local or AWS-hosted).
+
+2. Perform Actions:
+   - Add tasks using the "Add Task" form.
+   - View tasks in the task list.
+   - Delete tasks by clicking the "Delete" button next to each task.
+
+---
+
+## Contributing
+Contributions are welcome! To contribute:
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-name`).
+3. Commit your changes and push them (`git push origin feature-name`).
+4. Open a pull request.
+
+---
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
