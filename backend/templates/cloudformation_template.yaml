@@ -1,0 +1,54 @@
+Resources:
+  TasksTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: TasksTable
+      AttributeDefinitions:
+        - AttributeName: task_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: task_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  AddTaskFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: AddTaskFunction
+      Runtime: python3.9
+      Handler: add_task.lambda_handler
+      Code:
+        S3Bucket: hunterdevsecbucket  # Replace with your S3 bucket
+        S3Key: add_task.zip
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref TasksTable
+      Role: !GetAtt LambdaExecutionRole.Arn
+
+  GetTasksFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: GetTasksFunction
+      Runtime: python3.9
+      Handler: get_tasks.lambda_handler
+      Code:
+        S3Bucket: hunterdevsecbucket  # Replace with your S3 bucket
+        S3Key: get_tasks.zip
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref TasksTable
+      Role: !GetAtt LambdaExecutionRole.Arn
+
+  DeleteTaskFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: DeleteTaskFunction
+      Runtime: python3.9
+      Handler: delete_task.lambda_handler
+      Code:
+        S3Bucket: hunterdevsecbucket  # Replace with your S3 bucket
+        S3Key: delete_task.zip
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref TasksTable
+      Role: !GetAtt LambdaExecutionRole.Arn

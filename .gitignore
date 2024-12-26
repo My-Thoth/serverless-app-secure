@@ -1,0 +1,17 @@
+.env
+.git
+*.env
+.flaskenv
+.dcignore
+/app/.env
+/.git
+# Ignore virtual environments
+aenv/
+
+# Ignore pycache files
+__pycache__/
+/app/__pycache__/
+*.pyc
+*.pyo
+# Ignore log files
+*.log
